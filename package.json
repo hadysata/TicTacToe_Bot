@@ -1,0 +1,24 @@
+{
+  "name": "tictactoe_bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hadysata/TicTacToe_Bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hadysata/TicTacToe_Bot/issues"
+  },
+  "homepage": "https://github.com/hadysata/TicTacToe_Bot#readme",
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "firebase-admin": "^9.3.0",
+    "jimp": "^0.16.1"
+  }
+}
