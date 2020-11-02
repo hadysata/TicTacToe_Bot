@@ -18,7 +18,10 @@
   "homepage": "https://github.com/hadysata/TicTacToe_Bot#readme",
   "dependencies": {
     "core-js": "^3.6.5",
+    "dotenv": "^8.2.0",
     "firebase-admin": "^9.3.0",
-    "jimp": "^0.16.1"
+    "jimp": "^0.16.1",
+    "twit": "^2.2.11",
+    "twitter": "^1.7.1"
   }
 }

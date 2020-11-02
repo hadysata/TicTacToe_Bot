@@ -1,12 +1,15 @@
 const huPlayer = "O";
 const aiPlayer = "X";
 
-function play(board = [0, 1, 2, 3, 4, 5, 6, 7, 8], humanMove) {
+function play({ board = [0, 1, 2, 3, 4, 5, 6, 7, 8], humanMove = 9 }) {
     if (board.includes(humanMove)) {
+        board[humanMove] = huPlayer;
         board[minimax(board, aiPlayer).index] = aiPlayer;
         return { 'board': board, 'whoseWon': whoseWon(board) };
     } else {
-        return null;
+
+        board[getRandomInt(0, 8)] = aiPlayer
+        return { 'board': board, 'whoseWon': whoseWon(board) };
     }
 }
 
@@ -96,3 +99,12 @@ function winning(board, player) {
         return false;
     }
 }
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+module.exports.play = play;
+module.exports.emptyIndexes = emptyIndexes;
