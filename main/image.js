@@ -1,5 +1,5 @@
 const Jimp = require("jimp");
-const boardPath = '/Users/Hadi/Documents/GitHub/TicTacToe_Bot/assets/images/board.png';
+const boardPath = './assets/images/board.png';
 
 const positions = {
     1: [261, 222],

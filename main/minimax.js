@@ -5,6 +5,7 @@ function play({ board = [0, 1, 2, 3, 4, 5, 6, 7, 8], humanMove = 9 }) {
     if (board.includes(humanMove)) {
         board[humanMove] = huPlayer;
         board[minimax(board, aiPlayer).index] = aiPlayer;
+        if(emptyIndexes(board).length == 1) board[emptyIndexes(board)[0]] = huPlayer
         return { 'board': board, 'whoseWon': whoseWon(board) };
     } else {
 

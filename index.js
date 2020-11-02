@@ -4,13 +4,12 @@ let boardToImage = require('./main/image').boardToImage
 let play = require('./main/minimax').play
 let emptyIndexes = require('./main/minimax').emptyIndexes
 require('dotenv').config()
-const fs = require('fs');
 
 //initialize firebase
 
 const admin = require('firebase-admin');
 
-const serviceAccount = require('/Users/Hadi/Documents/GitHub/TicTacToe_Bot/assets/firebase/serviceAccountKey.json');
+const serviceAccount = require('./assets/firebase/serviceAccountKey.json');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
@@ -61,11 +60,11 @@ async function newTweet(tweet) {
 
     getGame(userId, db).then(firebaseGame => {
         let game;
-        let humanMove = parseInt(txt.match(/\d+/)[0]);
+        let humanMove =  txt.match(/\d+/) ? parseInt(txt.match(/\d+/)[0]) : false;
         if (!humanMove) {
             humanMove = 9
             console.log("Invalided human move")
-        }else{
+        } else {
             humanMove--
         }
 
@@ -114,7 +113,7 @@ async function newTweet(tweet) {
     function postTweetWithMedia(err, data, response) {
         let mediaIdStr = data.media_id_string;
         let params = {
-            status: `Tic Tac Toe bot(❌) VS ${userName}(⭕️)\n\nScores:\n🤖 Me: ${aiScore}\n🤡 You: ${playerScore}\n⚖️ Tie: ${tieScore}`,
+            status: `TicTacToe bot(❌) VS ${userName}(⭕️)\n\nScores:\n🤖 Me: ${aiScore}\n🤡 You: ${playerScore}\n⚖️ Tie: ${tieScore}`,
             in_reply_to_status_id: threadId,
             media_ids: [mediaIdStr],
             auto_populate_reply_metadata: true
