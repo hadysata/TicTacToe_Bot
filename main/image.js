@@ -16,9 +16,9 @@ const positions = {
 async function boardToImage(board, result) {
     var loadedImage;
 
-    loadedImage = await  Jimp.read(boardPath);
-   
-    let font = await  Jimp.loadFont(Jimp.FONT_SANS_128_WHITE);
+    loadedImage = await Jimp.read(boardPath);
+
+    let font = await Jimp.loadFont(Jimp.FONT_SANS_128_WHITE);
 
     for (let index = 0; index < board.length; index++) {
         const boardElement = board[index];
@@ -38,42 +38,7 @@ async function boardToImage(board, result) {
         }
     }
 
-   return await loadedImage.getBase64Async(Jimp.MIME_PNG)
-    
-    // Jimp.read(boardPath)
-    //     .then(function (image) {
-    //         loadedImage = image;
-    //         return Jimp.loadFont(Jimp.FONT_SANS_128_WHITE);
-    //     })
-    //     .then(function (font) {
-
-
-    //         for (let index = 0; index < board.length; index++) {
-    //             const boardElement = board[index];
-    //             if (boardElement == 'X' || boardElement == 'O')
-    //                 loadedImage.print(font, positions[index + 1][0], positions[index + 1][1], boardElement)
-    //         }
-
-    //         if (result != 'nobody') {
-    //             loadedImage.blur(15)
-
-    //             if (result == 'ai') {
-    //                 loadedImage.print(font, 385, 480, "I won :)")
-    //             } else if (result == 'human') {
-    //                 loadedImage.print(font, 320, 480, "You won !!!")
-    //             } else if (result == 'tie') {
-    //                 loadedImage.print(font, 210, 480, "Tie Game -_-")
-    //             }
-    //         }
-
-    //        return await loadedImage.getBase64Async(Jimp.MIME_PNG)
-    //         // loadedImage.write(`../games/${id}.png`);
-
-    //         // return id;
-    //     })
-    //     .catch(function (err) {
-    //         console.error(err);
-    //     });
+    return (await loadedImage.getBase64Async(Jimp.MIME_PNG)).replace("data:image/png;base64,", "")
 }
 
 module.exports.boardToImage = boardToImage;
