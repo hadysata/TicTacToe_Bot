@@ -1,21 +1,22 @@
-const huPlayer = "O";
+const humanPlayer = "O";
 const aiPlayer = "X";
+const corners = [0, 2, 6, 8];
+const emptyBoard = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
-function play({ board = [0, 1, 2, 3, 4, 5, 6, 7, 8], humanMove = 9 }) {
-    if (board.includes(humanMove)) {
-        board[humanMove] = huPlayer;
+function play({ board, humanMove }) {
+    if (!board || !board.length || emptyIndexes(board).length == 0) board = [...emptyBoard]
+    if (board.includes(humanMove) && emptyIndexes(board).length >= 0 && emptyIndexes(board).length <= 9) {
+        board[humanMove] = humanPlayer;
         board[minimax(board, aiPlayer).index] = aiPlayer;
-        if(emptyIndexes(board).length == 1) board[emptyIndexes(board)[0]] = huPlayer
-        return { 'board': board, 'whoseWon': whoseWon(board) };
+        if (emptyIndexes(board).length == 1) board[emptyIndexes(board)[0]] = humanPlayer //Play the last move if possible
     } else {
-
-        board[getRandomInt(0, 8)] = aiPlayer
-        return { 'board': board, 'whoseWon': whoseWon(board) };
+        board[getRandomItem(corners)] = aiPlayer
     }
+    return { 'board': board, 'whoseWon': whoseWon(board) };
 }
 
 function whoseWon(board) {
-    const isHumanWinning = winning(board, huPlayer);
+    const isHumanWinning = winning(board, humanPlayer);
     const isAiWinning = winning(board, aiPlayer);
     const isTie = emptyIndexes(board).length <= 0 && !isHumanWinning && !isAiWinning;
     return isHumanWinning ? 'human' : isAiWinning ? 'ai' : isTie ? 'tie' : 'nobody';
@@ -23,28 +24,28 @@ function whoseWon(board) {
 
 function minimax(newBoard, player) {
 
-    var availSpots = emptyIndexes(newBoard);
+    const availableSpots = emptyIndexes(newBoard);
 
-    if (winning(newBoard, huPlayer)) {
+    if (winning(newBoard, humanPlayer)) {
         return { score: -10 };
     }
     else if (winning(newBoard, aiPlayer)) {
         return { score: 10 };
     }
-    else if (availSpots.length === 0) {
+    else if (availableSpots.length === 0) {
         return { score: 0 };
     }
 
     var moves = [];
 
-    for (var i = 0; i < availSpots.length; i++) {
+    for (var i = 0; i < availableSpots.length; i++) {
         var move = {};
-        move.index = newBoard[availSpots[i]];
+        move.index = newBoard[availableSpots[i]];
 
-        newBoard[availSpots[i]] = player;
+        newBoard[availableSpots[i]] = player;
 
         if (player == aiPlayer) {
-            var result = minimax(newBoard, huPlayer);
+            var result = minimax(newBoard, humanPlayer);
             move.score = result.score;
         }
         else {
@@ -52,7 +53,7 @@ function minimax(newBoard, player) {
             move.score = result.score;
         }
 
-        newBoard[availSpots[i]] = move.index;
+        newBoard[availableSpots[i]] = move.index;
 
         moves.push(move);
     }
@@ -67,7 +68,6 @@ function minimax(newBoard, player) {
             }
         }
     } else {
-
         var bestScore = 10000;
         for (var i = 0; i < moves.length; i++) {
             if (moves[i].score < bestScore) {
@@ -82,6 +82,22 @@ function minimax(newBoard, player) {
 
 function emptyIndexes(board) {
     return board.filter(s => s != "O" && s != "X");
+}
+
+function getValidMoves(board) {
+    return emptyIndexes(board).map(function (val) { return ++val; }).toString();
+}
+
+function getHumanMove(text) {
+    let humanMove = text.match(/\d+/) ? parseInt(text.match(/\d+/)[0]) : false;
+    if (!humanMove) {
+        humanMove = 9
+        console.log("Invalided human move")
+    } else {
+        humanMove--
+    }
+
+    return humanMove;
 }
 
 function winning(board, player) {
@@ -101,11 +117,13 @@ function winning(board, player) {
     }
 }
 
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+function getRandomItem(Array) {
+    return Array[Math.floor(Math.random() * Array.length)];
 }
 
-module.exports.play = play;
-module.exports.emptyIndexes = emptyIndexes;
+module.exports = {
+    play,
+    emptyIndexes,
+    getValidMoves,
+    getHumanMove,
+};

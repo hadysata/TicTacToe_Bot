@@ -1,29 +1,32 @@
-async function setGame(board, playerId, aiScore = 0, playerScore = 0 , tieScore = 0, db) {
-    const docRef = db.collection('players').doc(playerId.toString());
+const admin = require('firebase-admin');
+const serviceAccount = require('./../assets/firebase/serviceAccountKey.json');
 
-    await docRef.set({
-        board: board,
-        aiScore: aiScore,
-        playerScore: playerScore,
-        tieScore: tieScore
-    });
+module.exports = class FirebaseServices {
+    constructor() {
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+        });
 
-    console.log(`set a game with ${playerId}`)
-}
+        this.db = admin.firestore();
+    }
 
-async function getGame(playerId , db){
-    const documentSnapshot = await db.collection('players').doc(playerId.toString()).get();
-    return documentSnapshot.data();
-}
+    async setGame(board, playerId, aiScore = 0, playerScore = 0, tieScore = 0) {
+        const docRef = this.db.collection('players').doc(playerId.toString());
+        await docRef.set({
+            board: board,
+            aiScore: aiScore,
+            playerScore: playerScore,
+            tieScore: tieScore
+        });
+        console.log(`set a game with ${playerId}`)
+    }
 
-// module.exports = {
-//     setGame,
-//     getGame
-//   }
+    async getGame(playerId) {
+        const documentSnapshot = await this.db.collection('players').doc(playerId.toString()).get();
+        return documentSnapshot.data();
+    }
 
-  module.exports.setGame = setGame;
-  module.exports.getGame = getGame;
-
+};
 
 
 
